@@ -1,14 +1,10 @@
-import ListGroup from "./components/ListGroup";
-import { useState } from "react";
+import {BsFillCalendarDayFill} from 'react-icons/bs'
 
 function App() {
-  const list =['Qasim','Ammar','yousaf','waqar']
-  const setSelectedItem = (list:string)=>{
-    console.log(list)
-  }
+
   return (
     <div>
-      <ListGroup items={list} heading="Brothers" onSelectItem={setSelectedItem}/>
+      <BsFillCalendarDayFill color='red' size={20}/>
 
     </div>
   );
