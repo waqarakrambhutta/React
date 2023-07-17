@@ -1,18 +1,20 @@
 import { useState } from "react";
 
 function App() {
-      
-  const [drink,setdrink]=useState({
-    title:'Pakistan',
-    price:5
-  })
+  const [we, us] = useState(['ammar','qasim','yousaf']);
 
-  const handleClick=()=>{
-    setdrink({...drink, price:6})
-  }
+  const handleClick = () => {
+    // adding item to array.
+    us([...we,'waqar'])
+    // remove
+    us(we.filter(tag => tag !== 'yousaf'))
+    //updating
+    us(we.map(tag=>tag === 'yousaf'? 'waqar': tag))
+
+  };
   return (
-    <div>
-      {drink.price}
+    <div>for 
+      {we}
       <button onClick={handleClick}>click me</button>
     </div>
   );
