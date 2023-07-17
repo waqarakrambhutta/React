@@ -1,21 +1,21 @@
 import { useState } from "react";
 
+
 function App() {
-  const [we, us] = useState(['ammar','qasim','yousaf']);
+  const [bugs,setbugs] = useState([
+    {id:1,title:'Bug 1',fixed:false},
+    {id:2,title:'Bug 2',fixed:false}
+  ]);
 
   const handleClick = () => {
-    // adding item to array.
-    us([...we,'waqar'])
-    // remove
-    us(we.filter(tag => tag !== 'yousaf'))
-    //updating
-    us(we.map(tag=>tag === 'yousaf'? 'waqar': tag))
-
+    setbugs(bugs.map(bug=>bug.id === 1 ? {...bug,fixed:true}: bug))
   };
   return (
-    <div>for 
-      {we}
-      <button onClick={handleClick}>click me</button>
+    <div>
+        <h1>Title: {bugs[0].title}</h1>
+        <p>Fixed: {bugs[0].fixed.toString()}</p>
+        <button onClick={handleClick}>Click me</button>
+
     </div>
   );
 }
