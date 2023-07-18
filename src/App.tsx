@@ -4,12 +4,22 @@ import Cart from "./components/Cart";
 
 function App() {
 
-  const [cartItem,setCartItem] = useState(['product1','product2'])
+  
+  const [game,setGame] = useState({
+    id:1,
+    player:{
+      name:'john'
+    }
+  })
+
+  const handleClick = ()=>{
+    setGame({...game,player:{...game.player,name:'waqar'}})
+  }
   
   return (
     <div>
-       <NavBar cartItemCount={cartItem.length}/>
-       <Cart cartItems={cartItem} onClose={()=>{setCartItem([])}}/>
+      {game.player.name}
+      <button onClick={handleClick}>Click me</button>
     </div>
   );
 }
