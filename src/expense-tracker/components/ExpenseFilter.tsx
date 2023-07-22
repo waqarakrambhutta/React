@@ -1,20 +1,27 @@
-import React from 'react'
+import React from "react";
+import { catagories } from "../../App";
 
 interface props {
-  onSelectCatagory:(catagory:string)=>void
+  onSelectCatagory: (catagory: string) => void;
 }
 
-const ExpenseFilter = ({onSelectCatagory}:props) => {
+const ExpenseFilter = ({ onSelectCatagory }: props) => {
   return (
     <div>
-        <select className='form-select' onChange={(event)=>onSelectCatagory(event.target.value)}>
-            <option value="">All Catagories</option>
-            <option value="Groceries">Groceries</option>
-            <option value="Utilities">Utilites</option>
-            <option value="Entertainment">Entertainment</option>
-        </select>
+      <select
+        className="form-select"
+        onChange={(event) => onSelectCatagory(event.target.value)}
+      >
+        <option value=""></option>
+        <option value="">All Catagories</option>
+        {catagories.map((catagory) => (
+          <option key={catagory} className="catagory">
+            {catagory}
+          </option>
+        ))}
+      </select>
     </div>
-  )
-}
+  );
+};
 
-export default ExpenseFilter
+export default ExpenseFilter;
