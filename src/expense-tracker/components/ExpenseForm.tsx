@@ -19,17 +19,26 @@ const validator = z.object({
 
 type ExpenseFormData = z.infer<typeof validator>;
 
-const ExpenseForm = () => {
+interface props{
+  onSubmit:(data:ExpenseFormData)=>void
+}
+
+const ExpenseForm = ({onSubmit}:props) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = useForm<ExpenseFormData>({ resolver: zodResolver(validator) });
 
   return (
-    <form onSubmit={handleSubmit(data=>console.log(data))}>
+    <form onSubmit={handleSubmit(data=>
+   { onSubmit(data)
+      reset();
+    }
+      )}>
       <div className="mb-3">
-        <label htmlFor="description" className="">
+        <label htmlFor="description">
           Description
         </label>
         <input
@@ -43,7 +52,7 @@ const ExpenseForm = () => {
         )}
       </div>
       <div className="mb-3">
-        <label htmlFor="amount" className="">
+        <label htmlFor="amount">
           Amount
         </label>
         <input
