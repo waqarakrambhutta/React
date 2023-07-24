@@ -5,15 +5,16 @@ function App() {
 
   const [category,setcategory]=useState('')
 
+  const connect = ()=> {console.log('Connecting');}
+  const disconnect = ()=> {console.log('disconnecting');}
+
+  useEffect(()=>{
+    connect();
+    return ()=>{disconnect()}
+  })
+
   return (
-    <div>
-      <select className="form-control" onChange={(event)=>setcategory(event.target.value)}>
-        <option value=""></option>
-        <option value="Clothing">Clothing</option>
-        <option value="Household">Household</option>
-      </select>
-      <ProductList category={category}/>
-    </div>
+    <div></div>
   );
 }
 export default App;
