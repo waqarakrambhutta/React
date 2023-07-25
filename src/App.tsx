@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ProductList from "./components/ProductList";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 interface User {
   id: number;
@@ -9,14 +9,22 @@ interface User {
 // we used interface for looking fields easily in the .then() function.
 
 function App() {
-  const [users, setusers] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [error,setError] = useState('')
 
   useEffect(() => {
-    axios
-      .get<User[]>("https://jsonplaceholder.typicode.com/xusers")
-      .then((response) => setusers(response.data))
-      .catch((err)=>setError(err.message));
+    const fetchUser = async()=>{
+      try
+      {
+        const res = await axios
+         .get<User[]>("https://jsonplaceholder.typicode.com/xusers")
+        setUsers(res.data)}
+        catch (err){
+          setError((err as AxiosError).message)
+        }
+    }
+    fetchUser();
+//get => await promise -> response / error
   });
 
   return (
