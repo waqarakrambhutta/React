@@ -10,18 +10,22 @@ interface User {
 
 function App() {
   const [users, setusers] = useState<User[]>([]);
+  const [error,setError] = useState('')
 
   useEffect(() => {
-    // here is the concept of promises understand it
-    // also log this on browser and see the type of data
-
     axios
-      .get<User[]>("https://jsonplaceholder.typicode.com/users")
-      .then((response) => setusers(response.data));
+      .get<User[]>("https://jsonplaceholder.typicode.com/xusers")
+      .then((response) => setusers(response.data))
+      .catch((err)=>setError(err.message));
   });
 
-  return <ul>
+  return (
+  <>
+  {error && <p className="text-danger">{error}</p>}
+  <ul>
     {users.map(user=><li key={user.id}>{user.name}</li>)}
   </ul>
+  </>
+  );
 }
 export default App;
