@@ -9,7 +9,7 @@ interface User {
 // we used interface for looking fields easily in the .then() function.
 
 function App() {
-  const [users, setusers] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
 
@@ -22,7 +22,7 @@ function App() {
         signal: controller.signal,
       })
       .then((response) => {
-        setusers(response.data);
+        setUsers(response.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -35,25 +35,29 @@ function App() {
   }, []);
 
   const deleteUser = (user: User) => {
-    const orignalUser = [...users];
-    setusers(users.filter((u) => u.id !== user.id));
+    const originalUser = [...users];
+    setUsers(users.filter((u) => u.id !== user.id));
 
     axios
       .delete("https://jsonplaceholder.typicode.com/users" + user.id)
       .catch((err) => {
         setError(err.message);
-        setusers(orignalUser);
+        setUsers(originalUser);
       });
   };
 
   const addUser = () => {
+    const originalUser = [...users]
     const newUser = { id: 0, name: "waqar" };
-    setusers([newUser, ...users]);
+    setUsers([newUser, ...users]);
 
     axios
       .post("https://jsonplaceholder.typicode.com/users", newUser)
-      .then(res => 
-        setusers([res.data, ...users]))
+      .then(({ data: savedUser }) => setUsers([savedUser, ...users]))
+      .catch((err) => {
+        setError(err.message);
+        setUsers(originalUser)
+      });
   };
 
   return (
