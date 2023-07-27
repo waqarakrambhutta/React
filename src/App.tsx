@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ProductList from "./components/ProductList";
-import axios, { CanceledError } from "axios";
+import apiClient, { CanceledError } from "./services/api-client";
 
 interface User {
   id: number;
@@ -17,8 +17,8 @@ function App() {
     const controller = new AbortController();
 
     setLoading(true);
-    axios
-      .get<User[]>("https://jsonplaceholder.typicode.com/users", {
+    apiClient
+      .get<User[]>("/users", {
         signal: controller.signal,
       })
       .then((response) => {
@@ -38,12 +38,10 @@ function App() {
     const originalUser = [...Users];
     setUsers(Users.filter((u) => u.id !== user.id));
 
-    axios
-      .delete("https://jsonplaceholder.typicode.com/users" + user.id)
-      .catch((err) => {
-        setError(err.message);
-        setUsers(originalUser);
-      });
+    apiClient.delete("/users" + user.id).catch((err) => {
+      setError(err.message);
+      setUsers(originalUser);
+    });
   };
 
   const addUser = () => {
@@ -51,8 +49,8 @@ function App() {
     const newUser = { id: 0, name: "waqar" };
     setUsers([newUser, ...Users]);
 
-    axios
-      .post("https://jsonplaceholder.typicode.com/users", newUser)
+    apiClient
+      .post("/users", newUser)
       .then(({ data: savedUser }) => setUsers([savedUser, ...Users]))
       .catch((err) => {
         setError(err.message);
@@ -60,17 +58,16 @@ function App() {
       });
   };
 
-  const updateUser = (user: User)=>{
-    const originalUser =  [...Users]
-    const updatedUser = {...user,name: user.name + '!'}
-    setUsers(Users.map(u=>u.id===user.id ? updatedUser: u))
+  const updateUser = (user: User) => {
+    const originalUser = [...Users];
+    const updatedUser = { ...user, name: user.name + "!" };
+    setUsers(Users.map((u) => (u.id === user.id ? updatedUser : u)));
 
-    axios.patch("https://jsonplaceholder.typicode.com/users"+ user.id, updatedUser)
-    .catch(err=>{
-      setError(err.message)
-      setUsers(originalUser)
-  })
-  }
+    apiClient.patch("/users" + user.id, updatedUser).catch((err) => {
+      setError(err.message);
+      setUsers(originalUser);
+    });
+  };
 
   return (
     <>
@@ -87,15 +84,20 @@ function App() {
           >
             {user.name}
             <div>
-            <button
-              className="btn btn-outline-danger"
-              onClick={() => {
-                deleteUser(user);
-              }}
-            >
-              Delete
-            </button>
-            <button className="btn btn-outline-secondary mx-1" onClick={() => updateUser(user)}>Update</button>
+              <button
+                className="btn btn-outline-danger"
+                onClick={() => {
+                  deleteUser(user);
+                }}
+              >
+                Delete
+              </button>
+              <button
+                className="btn btn-outline-secondary mx-1"
+                onClick={() => updateUser(user)}
+              >
+                Update
+              </button>
             </div>
           </li>
         ))}
