@@ -11,18 +11,30 @@ interface User {
 function App() {
   const [users, setusers] = useState<User[]>([]);
   const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
+
+    setLoading(true);
     axios
       .get<User[]>("https://jsonplaceholder.typicode.com/users", {
         signal: controller.signal,
       })
-      .then((response) => setusers(response.data))
+      .then((response) => {
+        setusers(response.data);
+        setLoading(false);
+      }
+      )
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
-      });
+        setLoading(false);
+      })
+      // .finally(()=>{   //we can use this .finally instead of above three repitition but it'll not work in the strick mode.
+      //   setLoading(false)
+      // });
+      
 
     return () => controller.abort();
   }, []);
@@ -30,6 +42,7 @@ function App() {
   return (
     <>
       {error && <p className="text-danger">{error}</p>}
+      {isLoading && <div className="spinner-border"></div>}
       <ul>
         {users.map((user) => (
           <li key={user.id}>{user.name}</li>
