@@ -31,7 +31,6 @@ function App() {
         setLoading(false);
       });
 
-
     return () => controller.abort();
   }, []);
 
@@ -47,10 +46,23 @@ function App() {
       });
   };
 
+  const addUser = () => {
+    const newUser = { id: 0, name: "waqar" };
+    setusers([newUser, ...users]);
+
+    axios
+      .post("https://jsonplaceholder.typicode.com/users", newUser)
+      .then(res => 
+        setusers([res.data, ...users]))
+  };
+
   return (
     <>
       {error && <p className="text-danger">{error}</p>}
       {isLoading && <div className="spinner-border"></div>}
+      <button className="btn btn-primary mb-3" onClick={addUser}>
+        Add
+      </button>
       <ul className="list-group">
         {users.map((user) => (
           <li
